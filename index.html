@@ -11,8 +11,9 @@
         
         <script type="text/javascript">
             var pushNotification;
-            
+            debugger
             function onDeviceReady() {
+            	debugger
                 $("#app-status-ul").append('<li>deviceready event received</li>');
                 
 				document.addEventListener("backbutton", function(e)
@@ -53,6 +54,7 @@
             
             // handle APNS notifications for iOS
             function onNotificationAPN(e) {
+            	debugger
                 if (e.alert) {
                      $("#app-status-ul").append('<li>push-notification: ' + e.alert + '</li>');
                      navigator.notification.alert(e.alert);
@@ -70,6 +72,7 @@
             
             // handle GCM notifications for Android
             function onNotificationGCM(e) {
+            	debugger
                 $("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
                 
                 switch( e.event )
@@ -118,16 +121,19 @@
             }
             
             function tokenHandler (result) {
+            	debugger
                 $("#app-status-ul").append('<li>token: '+ result +'</li>');
                 // Your iOS push server needs to know the token before it can push to this device
                 // here is where you might want to send it the token for later use.
             }
 
             function successHandler (result) {
+            	debugger
                 $("#app-status-ul").append('<li>success:'+ result +'</li>');
             }
             
             function errorHandler (error) {
+            	debugger
                 $("#app-status-ul").append('<li>error:'+ error +'</li>');
             }
             
