@@ -154,7 +154,9 @@
                 $("#app-status-ul").append('<li>error:'+ error +'</li>');
             }
             
-			document.addEventListener('deviceready', onDeviceReady, true);
+			document.addEventListener("deviceready", function(){
+			      showAlert("123");
+			 },true);
 			showAlert('addEventListener');
 
 			function initShowAlert(selectedElement) {
@@ -168,7 +170,7 @@
 			        alert(message ? (message + ": " + message) : message);
 			    }
 			}
-			
+
 			$('#actions').append('<a href="#" id="clickz">Click Here</a>');
 			document.getElementById("clickz").addEventListener("click", initShowAlert, false);
          </script>
