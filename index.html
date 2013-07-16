@@ -4,7 +4,9 @@
         <title>com.PhoneGap.c2dm</title>
     </head>
     <body>
-        
+        <div id="actions">
+				
+			</div>
         <!--<script type="text/javascript" charset="utf-8" src="cordova-2.2.0.js"></script>-->
 		<script src="lib/jquery-1.8.2.min.js"></script>
 		<script src="js/storage/memory-store.js"></script>
@@ -13,17 +15,17 @@
             var pushNotification;
             
             function onDeviceReady() {
-            	console.log('onDeviceReady');
+            	showAlert('onDeviceReady');
                 $("#app-status-ul").append('<li>deviceready event received</li>');
                 
 				document.addEventListener("backbutton", function(e)
 				{
-					console.log('backbutton');
+					showAlert('backbutton');
                 	$("#app-status-ul").append('<li>backbutton event received</li>');
   					
       				if( $("#home").length > 0)
 					{
-						console.log('#home');
+						showAlert('#home');
 						// call this to get a new token each time. don't call it to reuse existing token.
 						//pushNotification.unregister(successHandler, errorHandler);
 						e.preventDefault();
@@ -31,17 +33,17 @@
 					}
 					else
 					{
-						console.log('backHistory');
+						showAlert('backHistory');
 						navigator.app.backHistory();
 					}
 				}, false);
 
 				try 
 				{ 
-					console.log('window.plugins');
+					showAlert('window.plugins');
                 	pushNotification = window.plugins.pushNotification;
                 	if (device.platform == 'android' || device.platform == 'Android') {
-                		console.log('Android');
+                		showAlert('Android');
 						$("#app-status-ul").append('<li>registering android</li>');
                     	pushNotification.register(successHandler, errorHandler, {"senderID":"661780372179","ecb":"onNotificationGCM"});		// required!
 					} else {
@@ -51,8 +53,8 @@
                 }
 				catch(err) 
 				{ 
-					console.log('err');
-					console.log(err);
+					showAlert('err');
+					showAlert(err);
 					txt="There was an error on this page.\n\n"; 
 					txt+="Error description: " + err.message + "\n\n"; 
 					alert(txt); 
@@ -61,46 +63,46 @@
             
             // handle APNS notifications for iOS
             function onNotificationAPN(e) {
-            	console.log('onNotificationAPN');
+            	showAlert('onNotificationAPN');
                 if (e.alert) {
-                	console.log('e.alert');
-                	console.log(e.alert);
+                	showAlert('e.alert');
+                	showAlert(e.alert);
                      $("#app-status-ul").append('<li>push-notification: ' + e.alert + '</li>');
                      navigator.notification.alert(e.alert);
                 }
                     
                 if (e.sound) {
-                	console.log('e.sound');
+                	showAlert('e.sound');
                     var snd = new Media(e.sound);
                     snd.play();
                 }
                 
                 if (e.badge) {
-                	console.log('e.badge');
-                    pushNotification.setApplicationIconBadgeNumber(successHandler, e.badge);
+                	showAlert('e.badge');
+                    pushNotification(successHandler, e.badge);
                 }
             }
             
             // handle GCM notifications for Android
             function onNotificationGCM(e) {
-            	console.log('onNotificationGCM');
+            	showAlert('onNotificationGCM');
                 $("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
-                console.log('e.event');
+                showAlert('e.event');
                 switch( e.event )
                 {
                     case 'registered':
 					if ( e.regid.length > 0 )
 					{
-						console.log('e.regid.length');
+						showAlert('e.regid.length');
 						$("#app-status-ul").append('<li>REGISTERED -> REGID:' + e.regid + "</li>");
 						// Your GCM push server needs to know the regID before it can push to this device
 						// here is where you might want to send it the regID for later use.
-						console.log("regID = " + e.regID);
+						showAlert("regID = " + e.regID);
 					}
                     break;
                     
                     case 'message':
-                    console.log('message');
+                    showAlert('message');
                     	// if this flag is set, this notification happened while we were in the foreground.
                     	// you might want to play a sound to get the user's attention, throw up a dialog, etc.
                     	if (e.foreground)
@@ -124,36 +126,51 @@
                     break;
                     
                     case 'error':
-                    console.log('error');
+                    showAlert('error');
 						$("#app-status-ul").append('<li>ERROR -> MSG:' + e.msg + '</li>');
                     break;
                     
                     default:
-                    console.log('#app-status-ul');
+                    showAlert('#app-status-ul');
 						$("#app-status-ul").append('<li>EVENT -> Unknown, an event was received and we do not know what it is</li>');
                     break;
                 }
             }
             
             function tokenHandler (result) {
-            	console.log('tokenHandler');
+            	showAlert('tokenHandler');
                 $("#app-status-ul").append('<li>token: '+ result +'</li>');
                 // Your iOS push server needs to know the token before it can push to this device
                 // here is where you might want to send it the token for later use.
             }
 
             function successHandler (result) {
-            	console.log('successHandler');
+            	showAlert('successHandler');
                 $("#app-status-ul").append('<li>success:'+ result +'</li>');
             }
             
             function errorHandler (error) {
-            	console.log('errorHandler');
+            	showAlert('errorHandler');
                 $("#app-status-ul").append('<li>error:'+ error +'</li>');
             }
             
 			document.addEventListener('deviceready', onDeviceReady, true);
-			console.log('addEventListener');
+			showAlert('addEventListener');
+
+			function initShowAlert(selectedElement) {
+			    showAlert('You selected the following character');
+			}
+
+			function showAlert(message) {
+			    if (navigator.notification) {
+			        navigator.notification.alert(message, null, message, 'OK');
+			    } else {
+			        alert(message ? (message + ": " + message) : message);
+			    }
+			}
+			
+			$('#actions').append('<a href="#" id="clickz">Click Here</a>');
+			document.getElementById("clickz").addEventListener("click", initShowAlert, false);
          </script>
 		<div id="home">
 			<div id="app-status-div">
@@ -161,6 +178,7 @@
 					<li>Cordova PushNotification Plugin Demo</li>
 				</ul>
 			</div>
+			
 		</div>
     </body>
 </html>
