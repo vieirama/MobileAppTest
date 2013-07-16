@@ -154,9 +154,7 @@
                 $("#app-status-ul").append('<li>error:'+ error +'</li>');
             }
             
-			document.addEventListener("deviceready", function(){
-			      showAlert("123");
-			 },true);
+			//document.addEventListener('deviceready', onDeviceReady, true);
 			showAlert('addEventListener');
 
 			function initShowAlert(selectedElement) {
@@ -172,7 +170,7 @@
 			}
 
 			$('#actions').append('<a href="#" id="clickz">Click Here</a>');
-			document.getElementById("clickz").addEventListener("click", initShowAlert, false);
+			document.getElementById("clickz").addEventListener("click", onDeviceReady, false);
          </script>
 		<div id="home">
 			<div id="app-status-div">
